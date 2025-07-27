@@ -16,6 +16,6 @@ class CLS:
             if used:
                 answer[target_value] = probability
         if answer:
-            return answer, max(answer, key=lambda k: answer[k])
+            return max(answer, key=lambda k: answer[k])
         else:
             raise ValueError("No usable features in the input record.")

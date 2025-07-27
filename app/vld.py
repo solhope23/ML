@@ -1,6 +1,6 @@
 from app.cls import CLS
 
-class Evaluator:
+class VLD:
 
     @staticmethod
     def _gen_row_to_dict(table):
@@ -23,10 +23,9 @@ class Evaluator:
     @staticmethod
     def testing(test_table, target_column, conditional_dict):
         success_counter = 0
-        for row_to_dict in Evaluator._gen_row_to_dict(test_table):
-            row_without_target = Evaluator._remove_key(row_to_dict, target_column)
+        for row_to_dict in VLD._gen_row_to_dict(test_table):
+            row_without_target = VLD._remove_key(row_to_dict, target_column)
             cf = CLS.classify(row_without_target, conditional_dict)
-            if Evaluator._is_success(cf[1], row_to_dict[target_column]):
+            if VLD._is_success(cf, row_to_dict[target_column]):
                 success_counter += 1
-        return Evaluator._get_accuracy_percentage(success_counter, len(test_table))
-
+        return VLD._get_accuracy_percentage(success_counter, len(test_table))

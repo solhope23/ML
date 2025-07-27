@@ -3,12 +3,6 @@ from sklearn.model_selection import train_test_split
 class CLN:
 
     @staticmethod
-    def is_target_column_in_table(table, target_column):
-        if target_column not in table.columns:
-            raise ValueError(f"Target column '{target_column}' not found in table.")
-
-
-    @staticmethod
     def df_cleaner(table):
         columns_to_remove = CLN._find_unique_value_columns(table)
         return table[[col for col in table.columns if col not in columns_to_remove]]
