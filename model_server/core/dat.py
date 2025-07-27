@@ -1,9 +1,7 @@
 import pandas as pd
 import os
 
-
 class DAT:
-
 
     @staticmethod
     def load_csv():

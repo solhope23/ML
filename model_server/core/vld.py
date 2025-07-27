@@ -1,4 +1,4 @@
-from app.cls import CLS
+from .cls import CLS
 
 class VLD:
 

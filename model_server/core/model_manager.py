@@ -1,8 +1,8 @@
-from app.dat import DAT
-from app.cln import CLN
-from app.bld import BLD
-from app.vld import VLD
-from app.model import Model
+from .dat import DAT
+from .cln import CLN
+from .bld import BLD
+from .vld import VLD
+from .model import Model
 
 class ModelManager:
 

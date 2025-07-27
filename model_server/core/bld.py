@@ -9,7 +9,6 @@ class BLD:
         return model_dict
 
 
-
     @staticmethod
     def _count_feature_values(model_dict, table, target_column):
         target_values = table[target_column].unique()

@@ -1,25 +1,48 @@
 from typing import Optional
 from fastapi import FastAPI
-from app.model_manager import ModelManager
-from app.model import Model
+from core.model import Model
 from fastapi.responses import HTMLResponse
-from app.cls import CLS
+from core.cls import CLS
 from fastapi import Request
+import requests
+import os
+import time
+
+def wait_for_model(timeout=30):
+    host = os.getenv("MODEL_SERVER_HOST", "localhost")
+    url = f"http://{host}:8000/health"
+
+    for i in range(timeout):
+        try:
+            r = requests.get(url, timeout=1)
+            if r.status_code == 200:
+                print("✅ model_server is ready.")
+                return
+        except Exception as e:
+            print(f"⏳ model_server not ready yet: {e}")
+        print(f"⏳ Waiting for model_server... ({i + 1}/{timeout})")
+        time.sleep(1)
+
+    raise RuntimeError("❌ model_server not available after timeout.")
 
 app = FastAPI()
 
 model: Optional[Model] = None
 
 @app.on_event("startup")
-def train_model():
+def fetch_model():
     global model
     try:
-        model = ModelManager.builder()
-        print(f"Model trained")
+        wait_for_model()
+        host = os.getenv("MODEL_SERVER_HOST", "localhost")
+        response = requests.get(f"http://{host}:8000/get-model")
+        response.raise_for_status()
+        model = Model(**response.json())
+        print("Model fetched from model_server")
     except Exception as e:
-        print("Failed to train model on startup.")
+        print("Failed to fetch model from main_server")
         print(f"Reason: {str(e)}")
-        raise RuntimeError("Startup failed – model training failed.")
+        raise RuntimeError("Startup failed – model fetch failed.")
 
 
 @app.get("/form", response_class=HTMLResponse)
@@ -60,10 +83,7 @@ async def classify_form(request: Request):
             content=f"<h2>Error: {str(e)}</h2><a href='/form'>🔙 Back</a>"
         )
 
-@app.get("/")
-def read_root():
-    return {"message": "Server is up and running!"}
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="127.0.0.1", port=8001, reload=True)
