@@ -14,5 +14,6 @@ services:
       - "8001:8001"
     environment:
       - MODEL_SERVER_HOST=model_server
+      - MODEL_SERVER_PORT=8000
     depends_on:
       - model_server
