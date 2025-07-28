@@ -6,24 +6,7 @@ from core.cls import CLS
 from fastapi import Request
 import requests
 import os
-import time
 
-def wait_for_model(timeout=30):
-    host = os.getenv("MODEL_SERVER_HOST", "localhost")
-    url = f"http://{host}:8000/health"
-
-    for i in range(timeout):
-        try:
-            r = requests.get(url, timeout=1)
-            if r.status_code == 200:
-                print("✅ model_server is ready.")
-                return
-        except Exception as e:
-            print(f"⏳ model_server not ready yet: {e}")
-        print(f"⏳ Waiting for model_server... ({i + 1}/{timeout})")
-        time.sleep(1)
-
-    raise RuntimeError("❌ model_server not available after timeout.")
 
 app = FastAPI()
 
@@ -33,7 +16,6 @@ model: Optional[Model] = None
 def fetch_model():
     global model
     try:
-        wait_for_model()
         host = os.getenv("MODEL_SERVER_HOST", "localhost")
         response = requests.get(f"http://{host}:8000/get-model")
         response.raise_for_status()
