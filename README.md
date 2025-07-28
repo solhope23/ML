@@ -1,7 +1,10 @@
-# Naive Bayes Classifier API
+# Naive Bayes Classifier API – Version 1.0
 
 This project provides a FastAPI-based service that classifies input instances using a Naive Bayes model trained on tabular data.  
-The system is built modularly and includes data loading, cleaning, model building, validation, and classification components.
+The system includes components for data loading, cleaning, model building, validation, and classification.
+
+> 🧠 **Note:** The included dataset (`buy_computer_data.csv`) is just an example.  
+> The system is designed to work with **any categorical tabular dataset** and can be adapted accordingly.
 
 ---
 
@@ -21,7 +24,7 @@ ML-1.0/
 │   └── __init__.py
 │
 ├── data/
-│   └── buy_computer_data.csv  # Sample training dataset
+│   └── buy_computer_data.csv  # Sample dataset only
 │
 ├── main.py               # FastAPI app entry point
 ├── Dockerfile            # Docker container definition
@@ -83,24 +86,23 @@ docker run -p 8000:8000 ml-api
 
 ---
 
-## 📊 Dataset
+## 🧠 Custom Dataset
 
-The system uses the classic **"Buy Computer"** dataset, which includes features like:
-- Age
-- Income
-- Student
-- Credit Rating  
-and the target label: `buys_computer`
+To use your own data:
+1. Replace `data/buy_computer_data.csv` with your dataset
+2. Make sure all features are **categorical** and a **target column** is clearly defined
+3. Update the loader logic in `dat.py` if needed
+4. Restart the app (or rebuild container if using Docker)
 
 ---
 
 ## ✅ Features
 
-- Clean modular design
-- Model is trained at startup
-- FastAPI backend with HTML form
+- Works with any categorical tabular data
+- Model trained on startup
+- FastAPI backend with interactive HTML form
 - Dockerized for easy deployment
-- Uses Laplace smoothing for Naive Bayes
+- Laplace smoothing in Naive Bayes
 
 ---
 
@@ -108,16 +110,8 @@ and the target label: `buys_computer`
 
 - Python 3.11+
 - FastAPI
-- pandas, scikit-learn (if used)
+- pandas
 - uvicorn
-
----
-
-## 🧠 Future Work
-
-- Add support for model persistence (save/load)
-- Add REST endpoint for programmatic classification
-- Deploy to cloud (e.g., Render, Railway, Heroku)
 
 ---
 
