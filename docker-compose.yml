@@ -6,14 +6,12 @@ services:
     container_name: model_server
     ports:
       - "8000:8000"
-    working_dir: /app
 
   cls_server:
     build: ./cls_server
     container_name: cls_server
     ports:
       - "8001:8001"
-    working_dir: /app
     environment:
       - MODEL_SERVER_HOST=model_server
     depends_on:
